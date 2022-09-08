@@ -20,6 +20,10 @@ import { SettingsIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/react";
 import styled from "styled-components";
 import { useState } from "react";
+import store from "../store/timeWorkStore";
+import storeSecond from "../store/timeRestStore";
+
+import { observer } from "mobx-react-lite";
 
 const FlexDiv = styled.div`
   display: flex;
@@ -30,34 +34,24 @@ const FlexDiv = styled.div`
   }
 `;
 
-export default function Popup() {
+function Popup() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [value1, setValue1] = useState(25);
-  const [value2, setValue2] = useState(5);
 
   const defaultTime = {
     work: 25,
     rest: 5,
   };
 
-
   const resetTime = () => {
-    setValue1(defaultTime.work);
-    setValue2(defaultTime.rest);
+    store.changeInput(defaultTime.work);
+    storeSecond.changeInput(defaultTime.rest);
   };
 
   const saveTime = () => {
-    setValue1(value1);
-    setValue2(value2);
-    console.log(value1, value2);
+    store.changeValue(store.input)
+    storeSecond.changeValue(storeSecond.input)
     onClose();
   };
-
-  const handleChange = (value) => {
-    setValue1(value);
-  };
-  const handleChange2 = (value) => setValue2(value);
 
   return (
     <>
@@ -91,8 +85,9 @@ export default function Popup() {
                   min={1}
                   marginTop={0.6}
                   focusBorderColor="none"
-                  value={value1}
-                  onChange={handleChange}
+                  /////////////////////////////////////////////////////
+                  value={store.input}
+                  onChange={(value) => store.changeInput(value)}
                 >
                   <NumberInputField focusBorderColor="none" />
                   <NumberInputStepper>
@@ -110,8 +105,8 @@ export default function Popup() {
                   min={1}
                   marginTop={0.6}
                   focusBorderColor="none"
-                  value={value2}
-                  onChange={handleChange2}
+                  value={storeSecond.input}
+                  onChange={(value) => storeSecond.changeInput(value)}
                 >
                   <NumberInputField focusBorderColor="none" />
                   <NumberInputStepper>
@@ -141,3 +136,5 @@ export default function Popup() {
     </>
   );
 }
+
+export default observer(Popup);

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { getPadTime } from "../helpers/getPadTime";
 
+import store from "../store/timeWorkStore";
+import { observer } from "mobx-react-lite";
 const Timer = styled.h1`
   font-size: 64px;
   color: white;
@@ -16,36 +18,35 @@ const Timer = styled.h1`
 `;
 
 const PomoTablo = () => {
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isCounting, setIsCounting] = useState(false);
-  const [restTime, setRestTime] = useState(5 * 60);
+  // const [restTime, setRestTime] = useState(5 * 60);
   const [isRest, setIsRest] = useState(false);
 
   useEffect(() => {
+    
     var interval = setInterval(() => {
-      isCounting && setTimeLeft((time) => (timeLeft >= 1 ? (time -= 1) : 0));
-      if (timeLeft === 1) {
+      isCounting && store.changeValue(store.value>= 1/60 ? store.value -= 1/60 : 0);
+      if (store.value < 1/60) {
         setIsCounting(false);
-        setIsRest(true);
-        setTimeLeft(restTime);
+       
       }
-      if (timeLeft === 1 && isRest) {
+      if (store.value === 1/60 && isRest) {
         setIsCounting(false);
-        setRestTime(false);
+        setIsRest(false)
         //Вот сюда передаем состояние input
       }
     }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, [isCounting, timeLeft]);
+  }, [isCounting]);
   //Сначала оборачиваем в функцию,которая округляет время, затем в функцию, которая добавляет 0 перед цифрами, если длина строки < 2
-  const minutes = getPadTime(Math.floor(timeLeft / 60));
-  const seconds = getPadTime(Math.floor(timeLeft - minutes * 60));
+  const minutes = getPadTime(Math.floor(store.value * 60 / 60));
+  const seconds = getPadTime(Math.floor(store.value * 60  - minutes * 60));
 
   const handleStart = () => {
     setIsCounting(true);
-    setIsRest(false);
+ 
   };
 
   const handleStop = () => {
@@ -87,4 +88,4 @@ const PomoTablo = () => {
     </>
   );
 };
-export default PomoTablo;
+export default observer(PomoTablo);

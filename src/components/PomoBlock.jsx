@@ -7,8 +7,6 @@ import Popup from "./Popup";
 import { useState } from "react";
 
 const PomoBlock = () => {
-
- 
   
   return (
     <Center
@@ -33,7 +31,7 @@ const PomoBlock = () => {
         flexDir='column'
         justifyContent='center'
         alignItems='center'
-        boxShadow="sm"
+        boxShadow="xl"
         position="relative"
       >
         <Popup />
