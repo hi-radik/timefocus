@@ -1,7 +1,11 @@
 import { observable } from "mobx";
+import { configure } from "mobx"
 
+configure({
+    enforceActions: "never",
+})
 const storeSecond = observable({
-  value: 5,
+  value: 0.05,
   changeValue(value) {
     this.value = value;
     
