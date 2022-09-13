@@ -21,7 +21,7 @@ const Timer = styled.h1`
   position: relative;
 `;
 
-const PomoTablo = ({no}) => {
+const PomoTablo = ({yes}) => {
   //Состояние - запущен таймер или нет
   const [isCounting, setIsCounting] = useState(false);
 
@@ -29,23 +29,27 @@ const PomoTablo = ({no}) => {
   useEffect(() => {
     var interval = setInterval(() => {
       isCounting &&
-        store.changeValue(store.value > 1 / 60 ? (store.value -= 1 / 60.1) : 0);
+        storeSecond.changeValue(
+          storeSecond.value > 1 / 60 ? (storeSecond.value -= 1 / 60.1) : 0
+        );
       if (isCounting)
         document.title = `${getPadTime(
-          Math.floor((store.value * 60) / 60)
+          Math.floor((storeSecond.value * 60) / 60)
           // THE PROBLEM IS HERE
         )}:${
-          getPadTime(Math.floor(60 + store.value * 60 - minutes * 60)) >= 60
-            ? getPadTime(Math.floor(store.value * 60 - minutes * 60))
-            : getPadTime(Math.floor(60 + store.value * 60 - minutes * 60))
-        } - time to learn!`;
+          getPadTime(Math.floor(60 + storeSecond.value * 60 - minutes * 60)) >=
+          60
+            ? getPadTime(Math.floor(storeSecond.value * 60 - minutes * 60))
+            : getPadTime(Math.floor(60 + storeSecond.value * 60 - minutes * 60))
+        } - time to break!`;
 
-      if (store.value <= 1 / 60) {
+      if (storeSecond.value <= 1 / 60) {
         setIsCounting(false);
-        tabsStore.changeTab(1);
-        no()
-        store.changeValue(store.input);
+        tabsStore.changeTab(0);
+        yes();
+        storeSecond.changeValue(storeSecond.input);
       }
+
     }, 1000);
     return () => {
       clearInterval(interval);
@@ -53,19 +57,19 @@ const PomoTablo = ({no}) => {
   }, [isCounting]);
 
   //Сначала оборачиваем в функцию,которая округляет время, затем в функцию, которая добавляет 0 перед цифрами, если длина строки < 2
-  const minutes = getPadTime(Math.floor((store.value * 60) / 60));
-  const seconds = getPadTime(Math.floor(store.value * 60 - minutes * 60));
+  const minutes = getPadTime(Math.floor((storeSecond.value * 60) / 60));
+  const seconds = getPadTime(Math.floor(storeSecond.value * 60 - minutes * 60));
 
   //Функция запуска отсчета
   const handleStart = () => {
     setIsCounting(true);
-    console.log(store.value);
+    console.log(storeSecond.value);
   };
 
   //Функция остановки таймера
   const handleStop = () => {
     setIsCounting(false);
-    console.log(store.value);
+    console.log(storeSecond.value);
   };
 
   return (
@@ -78,7 +82,7 @@ const PomoTablo = ({no}) => {
 
       {!isCounting ? (
         <Button
-          colorScheme="purple"
+          colorScheme="blue"
           // gridColumn={"2/3"}
           // gridRow={"2/2"}
           transition="all 0.2s cubic-bezier(.08,.52,.52,1)"

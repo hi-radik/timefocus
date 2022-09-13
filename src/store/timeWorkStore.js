@@ -1,5 +1,9 @@
 import { observable } from "mobx";
+import { configure } from "mobx"
 
+configure({
+    enforceActions: "never",
+})
 const store = observable({
   value: 25,
   input: 25,

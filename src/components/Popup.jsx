@@ -22,7 +22,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import store from "../store/timeWorkStore";
 import storeSecond from "../store/timeRestStore";
-
+import tabsStore from "../store/tabs";
 import { observer } from "mobx-react-lite";
 
 const FlexDiv = styled.div`
@@ -48,8 +48,8 @@ function Popup() {
   };
 
   const saveTime = () => {
-    store.changeValue(store.input)
-    storeSecond.changeValue(storeSecond.input)
+    store.changeValue(store.input);
+    storeSecond.changeValue(storeSecond.input);
     onClose();
   };
 
@@ -72,18 +72,18 @@ function Popup() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent focusBorderColor="none">
-          <ModalHeader>Настройки</ModalHeader>
+          <ModalHeader>Settings</ModalHeader>
           <ModalCloseButton focusBorderColor="none" />
           <ModalBody>
             <FlexDiv>
               <div className="d">
-                <h2>Работа</h2>
+                <h2 style={{ fontWeight: "500" }}>Learning</h2>
                 <NumberInput
                   size="md"
                   maxW={24}
                   // defaultValue={25}
                   min={1}
-                  marginTop={0.6}
+                  marginTop={0.8}
                   focusBorderColor="none"
                   /////////////////////////////////////////////////////
                   value={store.input}
@@ -98,12 +98,12 @@ function Popup() {
               </div>
 
               <div>
-                <h2>Перерыв</h2>
+                <h2 style={{ fontWeight: "500" }}>Break</h2>
                 <NumberInput
                   size="md"
                   maxW={24}
                   min={1}
-                  marginTop={0.6}
+                  marginTop={0.8}
                   focusBorderColor="none"
                   value={storeSecond.input}
                   onChange={(value) => storeSecond.changeInput(value)}
@@ -120,15 +120,15 @@ function Popup() {
 
           <ModalFooter focusBorderColor="none">
             <Button
-              colorScheme="pink"
+              colorScheme="purple"
               mr={3}
               onClick={saveTime}
               focusBorderColor="none"
             >
-              Сохранить
+              Save
             </Button>
             <Button variant="ghost" onClick={resetTime} focusBorderColor="none">
-              Сбросить
+              Reset
             </Button>
           </ModalFooter>
         </ModalContent>
