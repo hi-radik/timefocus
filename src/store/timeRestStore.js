@@ -5,7 +5,7 @@ configure({
     enforceActions: "never",
 })
 const storeSecond = observable({
-  value: 0.05,
+  value: 5,
   changeValue(value) {
     this.value = value;
     
