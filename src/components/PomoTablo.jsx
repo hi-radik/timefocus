@@ -9,6 +9,9 @@ import { observer } from "mobx-react-lite";
 import tabsStore from "../store/tabs";
 import isLearn from "../store/learn";
 import isBreak from "../store/break";
+import isCountingFirst from "../store/countingFirst";
+import isCountingSecond from "../store/countingSecond";
+
 const Timer = styled.h1`
   font-size: 64px;
   color: white;
@@ -21,16 +24,16 @@ const Timer = styled.h1`
   position: relative;
 `;
 
-const PomoTablo = ({no}) => {
+const PomoTablo = ({ no }) => {
   //Состояние - запущен таймер или нет
-  const [isCounting, setIsCounting] = useState(false);
+  //const [isCounting, setIsCounting] = useState(false);
 
   //Хук для того, чтобы работал отсчет
   useEffect(() => {
     var interval = setInterval(() => {
-      isCounting &&
+      isCountingFirst.value &&
         store.changeValue(store.value > 1 / 60 ? (store.value -= 1 / 60.1) : 0);
-      if (isCounting)
+      if (isCountingFirst.value)
         document.title = `${getPadTime(
           Math.floor((store.value * 60) / 60)
           // THE PROBLEM IS HERE
@@ -41,16 +44,16 @@ const PomoTablo = ({no}) => {
         } - time to learn!`;
 
       if (store.value <= 1 / 60) {
-        setIsCounting(false);
+        isCountingFirst.setCountingFirst(false);
         tabsStore.changeTab(1);
-        no()
+        no();
         store.changeValue(store.input);
       }
     }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, [isCounting]);
+  }, [isCountingFirst.value]);
 
   //Сначала оборачиваем в функцию,которая округляет время, затем в функцию, которая добавляет 0 перед цифрами, если длина строки < 2
   const minutes = getPadTime(Math.floor((store.value * 60) / 60));
@@ -58,13 +61,14 @@ const PomoTablo = ({no}) => {
 
   //Функция запуска отсчета
   const handleStart = () => {
-    setIsCounting(true);
+    isCountingFirst.setCountingFirst(true);
+    // isCountingSecond.setCountingSecond(false);
     console.log(store.value);
   };
 
   //Функция остановки таймера
   const handleStop = () => {
-    setIsCounting(false);
+    isCountingFirst.setCountingFirst(false);
     console.log(store.value);
   };
 
@@ -76,7 +80,7 @@ const PomoTablo = ({no}) => {
         <span style={{ width: "100px", textAlign: "left" }}>{seconds}</span>
       </Timer>
 
-      {!isCounting ? (
+      {!isCountingFirst.value ? (
         <Button
           colorScheme="purple"
           // gridColumn={"2/3"}

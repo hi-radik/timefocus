@@ -9,6 +9,9 @@ import { observer } from "mobx-react-lite";
 import tabsStore from "../store/tabs";
 import isLearn from "../store/learn";
 import isBreak from "../store/break";
+import isCountingFirst from "../store/countingFirst";
+import isCountingSecond from "../store/countingSecond";
+
 const Timer = styled.h1`
   font-size: 64px;
   color: white;
@@ -21,18 +24,18 @@ const Timer = styled.h1`
   position: relative;
 `;
 
-const PomoTablo = ({yes}) => {
+const PomoTablo = ({ yes }) => {
   //Состояние - запущен таймер или нет
-  const [isCounting, setIsCounting] = useState(false);
+  //const [isCounting, setIsCounting] = useState(false);
 
   //Хук для того, чтобы работал отсчет
   useEffect(() => {
     var interval = setInterval(() => {
-      isCounting &&
+      isCountingSecond.value &&
         storeSecond.changeValue(
           storeSecond.value > 1 / 60 ? (storeSecond.value -= 1 / 60.1) : 0
         );
-      if (isCounting)
+      if (isCountingSecond.value)
         document.title = `${getPadTime(
           Math.floor((storeSecond.value * 60) / 60)
           // THE PROBLEM IS HERE
@@ -44,17 +47,16 @@ const PomoTablo = ({yes}) => {
         } - time to break!`;
 
       if (storeSecond.value <= 1 / 60) {
-        setIsCounting(false);
+        isCountingSecond.setCountingSecond(false);
         tabsStore.changeTab(0);
         yes();
         storeSecond.changeValue(storeSecond.input);
       }
-
     }, 1000);
     return () => {
       clearInterval(interval);
     };
-  }, [isCounting]);
+  }, [isCountingSecond.value]);
 
   //Сначала оборачиваем в функцию,которая округляет время, затем в функцию, которая добавляет 0 перед цифрами, если длина строки < 2
   const minutes = getPadTime(Math.floor((storeSecond.value * 60) / 60));
@@ -62,13 +64,13 @@ const PomoTablo = ({yes}) => {
 
   //Функция запуска отсчета
   const handleStart = () => {
-    setIsCounting(true);
+    isCountingSecond.setCountingSecond(true);
     console.log(storeSecond.value);
   };
 
   //Функция остановки таймера
   const handleStop = () => {
-    setIsCounting(false);
+    isCountingSecond.setCountingSecond(false);
     console.log(storeSecond.value);
   };
 
@@ -80,7 +82,7 @@ const PomoTablo = ({yes}) => {
         <span style={{ width: "100px", textAlign: "left" }}>{seconds}</span>
       </Timer>
 
-      {!isCounting ? (
+      {!isCountingSecond.value ? (
         <Button
           colorScheme="blue"
           // gridColumn={"2/3"}

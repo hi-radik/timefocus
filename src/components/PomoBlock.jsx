@@ -8,21 +8,30 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import tabsStore from "../store/tabs";
 import store from "../store/timeWorkStore";
+import storeSecond from "../store/timeRestStore";
 import isLearn from "../store/learn";
 import isBreak from "../store/break";
 import { Divider } from "@chakra-ui/react";
 import { Image } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
+import isCountingFirst from "../store/countingFirst";
+import isCountingSecond from "../store/countingSecond";
 
 const PomoBlock = () => {
   //Функции для изменения фонов
   const yes = () => {
     isLearn.setLearn(true);
     isBreak.setBreak(false);
+    isCountingSecond.setCountingSecond(false)
+    storeSecond.changeValue(storeSecond.input)
+    document.title = 'Timefocus - Learn Effectively!'
   };
   const no = () => {
     isBreak.setBreak(true);
     isLearn.setLearn(false);
+    isCountingFirst.setCountingFirst(false)
+    store.changeValue(store.input)
+    document.title = 'Timefocus - Learn Effectively!'
   };
 
   return (
@@ -38,13 +47,19 @@ const PomoBlock = () => {
       flexDirection="column"
       pb={100}
     >
-      <Box display="flex" width="500px" alignItems="center" >
+      <Box display="flex" width="500px" alignItems="center">
         <Box mb={2} display="flex" justifyContent="left" mr={3}>
           <Image src="/growth-mindset.png" alt="logo" h={9} />
         </Box>
 
-        
-        <Text fontSize='2xl' color='white' fontWeight={600} fontFamily='Poppins'>Timefocus</Text>
+        <Text
+          fontSize="2xl"
+          color="white"
+          fontWeight={600}
+          fontFamily="Poppins"
+        >
+          Timefocus
+        </Text>
       </Box>
 
       <Divider orientation="horizontal" width={500} bg="white" mb={6} />
